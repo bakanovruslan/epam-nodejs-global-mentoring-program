@@ -117,6 +117,11 @@ export const register = (app: express.Application) => {
     /**
      * Soft-delete user
      */
+
+
+    /**
+     * Delete user
+     */
     app.delete("/users/:userId", (req, res) => {
         //TODO: replace any types
         usersContainer = usersContainer.filter((obj: any) => {
