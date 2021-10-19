@@ -1,5 +1,5 @@
 import * as express from "express";
-import url from 'url';
+// import url from 'url';
 
 //TODO: replace any
 function searchUser(key: any, arr: any) {
@@ -10,11 +10,32 @@ function searchUser(key: any, arr: any) {
     }
 }
 
-function updateUser(id: string, params: object, box: []) {
+//TODO: replace any type
+function updateUser(id: string, params: any, box: []) {
     let user = searchUser(id, box);
-    console.log(user);
+    if (user) {
+        //TODO: validation for all params
+        if (params.id) {
+            user.id = params.id;    
+        }
+        if (params.login) {
+            user.login = params.login;    
+        }
+        if (params.password) {
+            user.password = params.password;    
+        }
+        if (params.age) {
+            user.age = params.age;    
+        }
+        if (params.isDeleted) {
+            user.isDeleted = params.isDeleted;    
+        }
+    } else {
+        //TODO: if empty case
+    }
 
-    //edit user
+    return user;
+
 }
 
 /**
@@ -60,19 +81,11 @@ export const register = (app: express.Application) => {
     /**
      * Update user
      */
-     app.patch("/users/:userId", (req, res) => {
-        // console.log(req);
-        
+    app.patch("/users/:userId", (req, res) => {
         let id = req.params.userId;
         let params = req.query;
-
-        // console.log(typeof req.query);
-
-        updateUser(id, params, usersContainer);
-
-        res.end();
-
+        let user = updateUser(id, params, usersContainer);
+        res.json(user);
     });
-
 
 };
