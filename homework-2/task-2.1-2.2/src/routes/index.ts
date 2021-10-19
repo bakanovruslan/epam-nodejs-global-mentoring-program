@@ -10,12 +10,11 @@ function getAutoSuggestUsers(loginSubstring: any, limit: any) {
     //TODO: replace any types
     result = result.filter((obj: any) => {
         return obj.login.includes(loginSubstring);
-    })
+    });
     //TODO: replace any types
     result.sort((a: any, b: any) => a.login.localeCompare(b.login));
     return result.slice(0, limit);
 }
-
 
 //TODO: replace any types
 function searchUser(key: any, arr: any) {
@@ -113,6 +112,17 @@ export const register = (app: express.Application) => {
         let result = searchUser(req.params.userId, usersContainer);
         //TODO: if empty case
         res.json(result);
+    });
+
+    /**
+     * Soft-delete user
+     */
+    app.delete("/users/:userId", (req, res) => {
+        //TODO: replace any types
+        usersContainer = usersContainer.filter((obj: any) => {
+            return obj.id != req.params.userId;
+        });
+        res.end();
     });
 
 
