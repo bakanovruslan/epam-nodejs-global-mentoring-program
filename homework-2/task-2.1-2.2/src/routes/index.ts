@@ -1,4 +1,32 @@
 import * as express from "express";
+import * as Joi from 'joi';
+import {
+    ContainerTypes,
+    ValidatedRequest,
+    ValidatedRequestSchema,
+    createValidator
+} from 'express-joi-validation';
+
+//TODO: validators to module
+const validator = createValidator();
+
+const querySchema = Joi.object({
+    id: Joi.string().required(),
+    login: Joi.string().required().alphanum().min(3).max(15),
+    password: Joi.string().required().regex(/^.*[0-9].*$/).regex(/^.*[a-z,A-Z].*$/),
+    age: Joi.string().required().min(4).max(130),
+    isDeleted: Joi.string().required()
+});
+
+interface UserRequestSchema extends ValidatedRequestSchema {
+    [ContainerTypes.Query]: {
+        id: string,
+        login: string,
+        password: string,
+        age: number,
+        isDeleted: boolean
+    }
+}
 
 //TODO: incapsulate params in config module
 const userLimit = 20;
@@ -70,7 +98,7 @@ export const register = (app: express.Application) => {
      * Create user 
      */
     //TODO: replace any types
-    app.post("/users", (req: any, res) => {
+    app.post("/users", validator.query(querySchema), (req: ValidatedRequest<UserRequestSchema>, res) => {
         let user: User = {
             id: req.query.id,
             login: req.query.login,
@@ -117,13 +145,12 @@ export const register = (app: express.Application) => {
     /**
      * Soft-delete user
      */
-     app.patch("/users/:userId", (req, res) => {
+    app.patch("/users/:userId", (req, res) => {
         let id = req.params.userId;
-        let params = {'isDeleted': true};
+        let params = { 'isDeleted': true };
         let user = updateUser(id, params, usersContainer);
-        res.json(user);   
+        res.json(user);
     });
-
 
     /**
      * Delete user
