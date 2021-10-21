@@ -86,7 +86,7 @@ export const register = (app: express.Application) => {
     /**
      * Update user
      */
-    app.patch("/users/:userId", (req, res) => {
+    app.put("/users/:userId", (req, res) => {
         let id = req.params.userId;
         let params = req.query;
         let user = updateUser(id, params, usersContainer);
@@ -117,6 +117,12 @@ export const register = (app: express.Application) => {
     /**
      * Soft-delete user
      */
+     app.patch("/users/:userId", (req, res) => {
+        let id = req.params.userId;
+        let params = {'isDeleted': true};
+        let user = updateUser(id, params, usersContainer);
+        res.json(user);   
+    });
 
 
     /**
