@@ -78,50 +78,46 @@ type User = {
 
 
 // let usersContainer: User[] = [];
-const userLimit = 20;
+const userLimit = 3;
 
 async function createUser(user: User) {
     let result = await Users.create(user);
     return result.toJSON();
 }
 
-// function getAutoSuggestUsers(loginSubstring: string, limit: number) {
-//     let result = usersContainer;
-//     result = result.filter((obj: User) => {
-//         return obj.login.includes(loginSubstring);
-//     });
-//     result.sort((a, b) => a.login.localeCompare(b.login));
-//     return result.slice(0, limit);
-// }
+//sorted by login and contain query substring in login
+async function getAutoSuggestUsers(loginSubstring: string, limit: number) {
+    // console.log(89);
+    // console.log(loginSubstring);
 
-function searchUser(key: string, arr: User[]) {
-    for (var i = 0; i < arr.length; i++) {
-        if (arr[i].id === key) {
-            return arr[i];
-        }
-    }
+    const listQuery = "SELECT id, login, password, age, is_deleted FROM users WHERE login LIKE '%" + loginSubstring + "%' ORDER BY login ASC LIMIT " + limit;
+    // let result: any;
+    let result = await sequelize.query(listQuery);
+
+    console.log(97);
+
+    /**
+     * TODO: get only array from the data
+     */
+    console.log(result);
+    // console.log(JSON.stringify(result));
+
+
+    // return result.toJSON();
 }
 
-function updateUser(id: string, params: any, box: User[]) {
-    let user = searchUser(id, box);
-    if (user) {
-        if (params.id) {
-            user.id = params.id;
-        }
-        if (params.login) {
-            user.login = params.login;
-        }
-        if (params.password) {
-            user.password = params.password;
-        }
-        if (params.age) {
-            user.age = params.age;
-        }
-        if (params.isDeleted) {
-            user.isDeleted = params.isDeleted;
-        }
-    }
-    return user;
+// function searchUser(key: string, arr: User[]) {
+//     for (var i = 0; i < arr.length; i++) {
+//         if (arr[i].id === key) {
+//             return arr[i];
+//         }
+//     }
+// }
+
+function updateUser(userId: number, params: any) {
+    Users.findByPk(userId).then(function (user: any) {
+        Users.update(params, { where: { id: userId } });
+    });
 }
 
 export const register = (app: express.Application) => {
@@ -148,23 +144,36 @@ export const register = (app: express.Application) => {
     /**
      * Update user
      */
-    // app.put("/users/:userId", validator.query(updateSchema), (req: ValidatedRequest<UserRequestSchema>, res) => {
-    //     let id = req.params.userId;
-    //     let params = req.query;
-    //     let user = updateUser(id, params, usersContainer);
-    //     res.json(user);
-    // });
+    app.put("/users/:userId", validator.query(updateSchema), (req: ValidatedRequest<UserRequestSchema>, res) => {
+        let id = req.params.userId;
+        let params = req.query;
+        let user = updateUser(id, params);
+        res.json(user);
+    });
 
     /**
      * Auto-suggested list (filtered by substring)
      */
-    // app.get("/users/list", (req, res) => {
-    //     if (req.query.search) {
-    //         let result = getAutoSuggestUsers(req.query.search.toString(), userLimit);
-    //         res.json(result);
-    //     }
-    //     res.end();
-    // });
+    app.get("/users/list", (req, res) => {
+        if (req.query.search) {
+            getAutoSuggestUsers(req.query.search.toString(), userLimit).then(function(data: any) {
+                console.log(148);
+                console.log(data);
+                res.json(data);
+            }, function() {
+                console.log(154);
+                console.log('fail');
+                res.end();
+            });
+
+            // console.log(155);
+            // console.log(typeof result);
+            // console.log(result);
+            res.end();
+            // res.json(result);
+        }
+        
+    });
 
     /**
      * Get user
