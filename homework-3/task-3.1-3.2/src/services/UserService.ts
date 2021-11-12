@@ -1,9 +1,11 @@
+import {User} from '../types/User';
+import {Users} from '../models/Users';
+
 class UserService {
 
-    createUser() {
-        console.log(4);
-        console.log('success');
-        return 'success';
+    async createUser(user: User) {
+        let result = await Users.create(user);
+        return result.toJSON();
     }
 
 }
