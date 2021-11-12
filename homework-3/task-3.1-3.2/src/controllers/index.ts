@@ -9,6 +9,16 @@ import {
 
 import { Sequelize, STRING, NUMBER, BOOLEAN, QueryTypes } from "sequelize";
 
+// import * as routes from "./controllers";
+
+// var UserService = require('../services/UserService');
+
+import {UserService} from '../services/UserService';
+
+console.log(13);
+console.log(UserService);
+
+
 const sequelize = new Sequelize('postgres://Ruslan_Bakanov:pass@localhost:5432/homework-3');
 
 const Users = sequelize.define('users', {
@@ -102,19 +112,28 @@ export const register = (app: express.Application) => {
      * Create user 
      */
     app.post("/users", validator.query(createSchema), (req: ValidatedRequest<UserRequestSchema>, res) => {
-        let user: User = {
-            id: req.query.id,
-            login: req.query.login,
-            password: req.query.password,
-            age: req.query.age,
-            isDeleted: req.query.isDeleted,
-        }
-        let result = createUser(user);
-        result.then(function (data) {
-            res.json(data);
-        }, function () {
-            res.end();
-        });
+        const service = new UserService();
+        const data = service.createUser();
+        console.log(117);
+        console.log(data);
+        // return res.json(data);
+        res.end();
+
+
+        // let user: User = {
+        //     id: req.query.id,
+        //     login: req.query.login,
+        //     password: req.query.password,
+        //     age: req.query.age,
+        //     isDeleted: req.query.isDeleted,
+        // }
+        // let result = createUser(user);
+        // result.then(function (data) {
+        //     res.json(data);
+        // }, function () {
+        //     res.end();
+        // });
+
     });
 
     /**
