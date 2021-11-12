@@ -75,8 +75,6 @@ type User = {
     isDeleted: boolean;
 }
 
-
-// let usersContainer: User[] = [];
 const userLimit = 3;
 
 async function createUser(user: User) {
@@ -89,13 +87,9 @@ async function getAutoSuggestUsers(loginSubstring: string, limit: number) {
     return await sequelize.query(listQuery, { type: QueryTypes.SELECT });
 }
 
-// function searchUser(key: string, arr: User[]) {
-//     for (var i = 0; i < arr.length; i++) {
-//         if (arr[i].id === key) {
-//             return arr[i];
-//         }
-//     }
-// }
+async function searchUser(key: string) {
+    return await Users.findByPk(key);
+}
 
 async function updateUser(userId: number, params: any) {
     await Users.update(params, { where: { id: userId } });
@@ -155,10 +149,13 @@ export const register = (app: express.Application) => {
     /**
      * Get user
      */
-    // app.get("/users/:userId", (req, res) => {
-    //     let result = searchUser(req.params.userId, usersContainer);
-    //     res.json(result);
-    // });
+    app.get("/users/:userId", (req, res) => {
+        searchUser(req.params.userId).then(function (data: any) {
+            res.json(data.toJSON());
+        }, function () {
+            res.end();
+        });
+    });
 
     /**
      * Soft-delete user
@@ -168,16 +165,6 @@ export const register = (app: express.Application) => {
     //     let params = { 'isDeleted': true };
     //     let user = updateUser(id, params, usersContainer);
     //     res.json(user);
-    // });
-
-    /**
-     * Delete user
-     */
-    // app.delete("/users/:userId", (req, res) => {
-    //     usersContainer = usersContainer.filter((obj: User) => {
-    //         return obj.id != req.params.userId;
-    //     });
-    //     res.end();
     // });
 
 };
