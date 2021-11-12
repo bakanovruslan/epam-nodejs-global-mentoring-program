@@ -31,6 +31,8 @@ const userLimit = 3;
 //     return await Users.findByPk(userId);
 // }
 
+import {Users} from '../models/Users';
+
 export const register = (app: express.Application) => {
 
     /**
@@ -38,7 +40,7 @@ export const register = (app: express.Application) => {
      */
     app.post("/users", validator.query(createSchema), async (req: ValidatedRequest<UserRequestSchema>, res) => {
         const user: User = req.query;
-        const service = new UserService();
+        const service = new UserService(Users);
         service.createUser(user).then(function (data) {
             res.json(data);
         }, function () {

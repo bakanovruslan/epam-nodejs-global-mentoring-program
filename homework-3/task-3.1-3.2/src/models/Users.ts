@@ -1,7 +1,4 @@
-import { Sequelize, STRING, NUMBER, BOOLEAN, QueryTypes } from "sequelize";
-
-//TODO: to data-access layer
-const sequelize = new Sequelize('postgres://Ruslan_Bakanov:pass@localhost:5432/homework-3');
+import { sequelize, NUMBER, STRING, BOOLEAN } from '../data-access/sequelize';
 
 export const Users = sequelize.define('users', {
     id: {

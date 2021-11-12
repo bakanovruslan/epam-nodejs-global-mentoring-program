@@ -1,10 +1,14 @@
 import {User} from '../types/User';
-import {Users} from '../models/Users';
-
 class UserService {
 
+    private userModel;
+
+    constructor(userModel: any) {
+        this.userModel = userModel;
+    }
+
     async createUser(user: User) {
-        let result = await Users.create(user);
+        let result = await this.userModel.create(user);
         return result.toJSON();
     }
 
