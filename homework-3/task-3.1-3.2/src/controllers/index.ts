@@ -1,42 +1,18 @@
 import * as express from "express";
-import * as Joi from 'joi';
+// import * as Joi from 'joi';
 import {
-    ContainerTypes,
+    // ContainerTypes,
     ValidatedRequest,
-    ValidatedRequestSchema,
-    createValidator
+    // ValidatedRequestSchema,
+    // createValidator
 } from 'express-joi-validation';
 
 import { UserService } from '../services/UserService';
 
 import { User } from '../types/User';
 
-const validator = createValidator();
+import {validator, createSchema, updateSchema, UserRequestSchema} from '../validators/validators';
 
-const createSchema = Joi.object({
-    id: Joi.string().required(),
-    login: Joi.string().required().alphanum().min(3).max(15),
-    password: Joi.string().required().regex(/^.*[0-9].*$/).regex(/^.*[a-z,A-Z].*$/),
-    age: Joi.number().required().min(4).max(130),
-    isDeleted: Joi.string().required()
-});
-
-const updateSchema = Joi.object({
-    login: Joi.string().alphanum().min(3).max(15),
-    password: Joi.string().regex(/^.*[0-9].*$/).regex(/^.*[a-z,A-Z].*$/),
-    age: Joi.number().min(4).max(130),
-    isDeleted: Joi.string()
-});
-
-interface UserRequestSchema extends ValidatedRequestSchema {
-    [ContainerTypes.Query]: {
-        id: string,
-        login: string,
-        password: string,
-        age: number,
-        isDeleted: boolean
-    }
-}
 
 const userLimit = 3;
 
