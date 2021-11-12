@@ -7,8 +7,7 @@ import {
     createValidator
 } from 'express-joi-validation';
 
-import { Sequelize, STRING, NUMBER, BOOLEAN } from "sequelize";
-import { type } from "os";
+import { Sequelize, STRING, NUMBER, BOOLEAN, QueryTypes } from "sequelize";
 
 const sequelize = new Sequelize('postgres://Ruslan_Bakanov:pass@localhost:5432/homework-3');
 
@@ -85,25 +84,9 @@ async function createUser(user: User) {
     return result.toJSON();
 }
 
-//sorted by login and contain query substring in login
 async function getAutoSuggestUsers(loginSubstring: string, limit: number) {
-    // console.log(89);
-    // console.log(loginSubstring);
-
-    const listQuery = "SELECT id, login, password, age, is_deleted FROM users WHERE login LIKE '%" + loginSubstring + "%' ORDER BY login ASC LIMIT " + limit;
-    // let result: any;
-    let result = await sequelize.query(listQuery);
-
-    console.log(97);
-
-    /**
-     * TODO: get only array from the data
-     */
-    console.log(result);
-    // console.log(JSON.stringify(result));
-
-
-    // return result.toJSON();
+    let listQuery = "SELECT id, login, password, age, is_deleted FROM users WHERE login LIKE '%" + loginSubstring + "%' ORDER BY login ASC LIMIT " + limit;
+    return await sequelize.query(listQuery, { type: QueryTypes.SELECT });
 }
 
 // function searchUser(key: string, arr: User[]) {
@@ -114,10 +97,9 @@ async function getAutoSuggestUsers(loginSubstring: string, limit: number) {
 //     }
 // }
 
-function updateUser(userId: number, params: any) {
-    Users.findByPk(userId).then(function (user: any) {
-        Users.update(params, { where: { id: userId } });
-    });
+async function updateUser(userId: number, params: any) {
+    await Users.update(params, { where: { id: userId } });
+    return await Users.findByPk(userId);
 }
 
 export const register = (app: express.Application) => {
@@ -147,8 +129,11 @@ export const register = (app: express.Application) => {
     app.put("/users/:userId", validator.query(updateSchema), (req: ValidatedRequest<UserRequestSchema>, res) => {
         let id = req.params.userId;
         let params = req.query;
-        let user = updateUser(id, params);
-        res.json(user);
+        updateUser(id, params).then(function (data: any) {
+            res.json(data.toJSON());
+        }, function () {
+            res.end();
+        });
     });
 
     /**
@@ -156,23 +141,15 @@ export const register = (app: express.Application) => {
      */
     app.get("/users/list", (req, res) => {
         if (req.query.search) {
-            getAutoSuggestUsers(req.query.search.toString(), userLimit).then(function(data: any) {
-                console.log(148);
-                console.log(data);
+            getAutoSuggestUsers(req.query.search.toString(), userLimit).then(function (data: any) {
                 res.json(data);
-            }, function() {
-                console.log(154);
-                console.log('fail');
+            }, function () {
                 res.end();
             });
-
-            // console.log(155);
-            // console.log(typeof result);
-            // console.log(result);
-            res.end();
-            // res.json(result);
         }
-        
+        else {
+            res.end();
+        }
     });
 
     /**
