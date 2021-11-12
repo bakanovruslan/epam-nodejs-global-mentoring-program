@@ -160,11 +160,14 @@ export const register = (app: express.Application) => {
     /**
      * Soft-delete user
      */
-    // app.patch("/users/:userId", (req, res) => {
-    //     let id = req.params.userId;
-    //     let params = { 'isDeleted': true };
-    //     let user = updateUser(id, params, usersContainer);
-    //     res.json(user);
-    // });
+    app.patch("/users/:userId", (req, res) => {
+        let id = parseInt(req.params.userId);
+        let params = { 'isDeleted': true };
+        updateUser(id, params).then(function (data: any) {
+            res.json(data.toJSON());
+        }, function () {
+            res.end();
+        });
+    });
 
 };
