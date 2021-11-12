@@ -11,7 +11,7 @@ import { UserService } from '../services/UserService';
 
 import { User } from '../types/User';
 
-import {validator, createSchema, updateSchema, UserRequestSchema} from '../validators/validators';
+import { validator, createSchema, updateSchema, UserRequestSchema } from '../validators/validators';
 
 
 const userLimit = 3;
@@ -26,12 +26,7 @@ const userLimit = 3;
 //     return await Users.findByPk(key);
 // }
 
-// async function updateUser(userId: number, params: any) {
-//     await Users.update(params, { where: { id: userId } });
-//     return await Users.findByPk(userId);
-// }
-
-import {Users} from '../models/Users';
+import { Users } from '../models/Users';
 
 export const register = (app: express.Application) => {
 
@@ -51,15 +46,16 @@ export const register = (app: express.Application) => {
     /**
      * Update user
      */
-    // app.put("/users/:userId", validator.query(updateSchema), (req: ValidatedRequest<UserRequestSchema>, res) => {
-    //     let id = req.params.userId;
-    //     let params = req.query;
-    //     updateUser(id, params).then(function (data: any) {
-    //         res.json(data.toJSON());
-    //     }, function () {
-    //         res.end();
-    //     });
-    // });
+    app.put("/users/:userId", validator.query(updateSchema), (req: ValidatedRequest<UserRequestSchema>, res) => {
+        const id = req.params.userId;
+        const params = req.query;
+        const service = new UserService(Users);
+        service.updateUser(id, params).then(function (data: any) {
+            res.json(data.toJSON());
+        }, function () {
+            res.end();
+        });
+    });
 
     /**
      * Auto-suggested list (filtered by substring)
