@@ -39,7 +39,6 @@ export const register = (app: express.Application) => {
      */
     app.get("/users/list", (req, res) => {
         if (req.query.search) {
-            //TODO: to .env/config
             const userLimit = 3;
             const filterString = req.query.search.toString();
             const service = new UserService(Users);
