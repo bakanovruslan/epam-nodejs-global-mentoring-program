@@ -8,15 +8,15 @@ class GroupService {
         this.groupModel = groupModel;
     }
 
-    // async createUser(user: User) {
-    //     let result = await this.userModel.create(user);
-    //     return result.toJSON();
-    // }
+    async createGroup(user: Group) {
+        let result = await this.groupModel.create(user);
+        return result.toJSON();
+    }
 
-    // async updateUser(userId: string, data: object) {
-    //     await this.userModel.update(data, { where: { id: userId } });
-    //     return await this.userModel.findByPk(userId);
-    // }
+    async updateGroup(groupId: string, data: object) {
+        await this.groupModel.update(data, { where: { id: groupId } });
+        return await this.groupModel.findByPk(groupId);
+    }
 
     // async getAutoSuggestedUsers(loginSubstring: string, sqlLimit: number) {
     //     let listQuery = "SELECT id, login, password, age, is_deleted FROM users WHERE login LIKE '%" + loginSubstring + "%' ORDER BY login ASC LIMIT " + sqlLimit;
@@ -26,6 +26,16 @@ class GroupService {
     async getGroup(groupId: number) {
         return await this.groupModel.findByPk(groupId);
     }
+
+    async getAllGroups() {
+        return await this.groupModel.findAll();
+    }
+
+    async removeGroup(groupId: number) {
+        return await this.groupModel.destroy({ where: { id: groupId } });
+    }
+
+
 
 }
 export { GroupService };
