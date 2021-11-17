@@ -5,3 +5,8 @@ CREATE TABLE groups(
     name varchar(255),
     permissions permission[]
 );
+
+CREATE TABLE user_group (
+    user_id int,
+    group_id int
+);
