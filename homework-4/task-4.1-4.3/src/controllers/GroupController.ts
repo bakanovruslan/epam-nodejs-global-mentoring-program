@@ -20,7 +20,7 @@ export const register = (app: express.Application) => {
     });
 
     /**
-     * Update user
+     * Update group
      */
     app.put("/groups/:groupId", validator.query(updateSchema), (req: ValidatedRequest<GroupRequestSchema>, res) => {
         const id = req.params.groupId;
@@ -34,7 +34,7 @@ export const register = (app: express.Application) => {
     });
 
     /**
-     * Remove user
+     * Remove group
      */
     app.delete("/groups/:groupId", (req, res) => {
         const id = req.params.groupId;
