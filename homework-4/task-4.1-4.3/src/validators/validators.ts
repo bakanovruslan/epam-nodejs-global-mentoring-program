@@ -17,7 +17,6 @@ export const updateSchema = Joi.object({
     age: Joi.number().min(4).max(130),
     isDeleted: Joi.string()
 });
-
 export interface UserRequestSchema extends ValidatedRequestSchema {
     [ContainerTypes.Query]: {
         id: string,

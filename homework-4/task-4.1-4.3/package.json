@@ -6,7 +6,7 @@
   "scripts": {
     "build": "tsc",
     "run": "node .",
-    "build-run": "tsc; node ."
+    "build-run": "tsc; node --unhandled-rejections=strict ."
   },
   "keywords": [],
   "author": "",
