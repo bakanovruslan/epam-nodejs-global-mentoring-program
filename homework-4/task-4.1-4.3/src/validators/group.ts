@@ -1,5 +1,6 @@
 import * as Joi from 'joi';
 import { ContainerTypes, ValidatedRequestSchema, createValidator } from 'express-joi-validation';
+import { Group } from '../types/Group';
 
 export const validator = createValidator();
 

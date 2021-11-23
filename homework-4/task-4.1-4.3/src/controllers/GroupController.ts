@@ -3,6 +3,7 @@ import { GroupService } from '../services/GroupService';
 import { Groups } from '../models/Groups';
 import { ValidatedRequest } from 'express-joi-validation';
 import { validator, createSchema, updateSchema, GroupRequestSchema } from '../validators/group';
+import { Group } from '../types/Group';
 
 export const register = (app: express.Application) => {
 

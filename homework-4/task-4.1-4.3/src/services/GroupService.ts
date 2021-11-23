@@ -1,3 +1,4 @@
+import { Group } from '../types/Group';
 class GroupService {
 
     private groupModel;
