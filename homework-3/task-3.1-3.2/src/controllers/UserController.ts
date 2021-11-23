@@ -10,7 +10,7 @@ export const register = (app: express.Application) => {
     /**
      * Create user 
      */
-    app.post("/users", validator.query(createSchema), async (req: ValidatedRequest<UserRequestSchema>, res) => {
+    app.post("/users", validator.query(createSchema), (req: ValidatedRequest<UserRequestSchema>, res) => {
         const user: User = req.query;
         const service = new UserService(Users);
         service.createUser(user).then(function (data) {

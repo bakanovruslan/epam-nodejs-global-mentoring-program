@@ -9,7 +9,7 @@ export const register = (app: express.Application) => {
     /**
      * Greate groups
      */
-    app.post("/groups", validator.query(createSchema), async (req: ValidatedRequest<GroupRequestSchema>, res) => {
+    app.post("/groups", validator.query(createSchema), (req: ValidatedRequest<GroupRequestSchema>, res) => {
         const group: Group = req.query;
         const service = new GroupService(Groups);
         service.createGroup(group).then(function (data) {
