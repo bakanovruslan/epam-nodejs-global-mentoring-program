@@ -18,3 +18,5 @@ CREATE TABLE user_group (
             REFERENCES groups(id) 
                 ON UPDATE CASCADE ON DELETE CASCADE
 );
+
+CREATE UNIQUE INDEX ui_user_group ON user_group(user_id, group_id);
