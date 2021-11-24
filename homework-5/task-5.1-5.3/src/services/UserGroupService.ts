@@ -1,5 +1,5 @@
 import { sequelize } from '../data-access/sequelize';
-
+import { Winston } from '../loggers/Winston'
 export class UserGroupService {
 
     private userGroupModel;
@@ -9,6 +9,7 @@ export class UserGroupService {
     }
 
     async addUsersToGroup(userId: number, groupsIds: any) {
+        Winston.log({ level: 'debug', message: `${this.constructor.name}::${this.addUsersToGroup.name}`, attributes: arguments });
         const groups = groupsIds.split(',');
         const t = await sequelize.transaction();
         try {
