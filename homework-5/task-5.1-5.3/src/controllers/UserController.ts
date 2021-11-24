@@ -5,6 +5,32 @@ import { User } from '../types/User';
 import { validator, createSchema, updateSchema, UserRequestSchema } from '../validators/validators';
 import { Users } from '../models/Users';
 
+import winston from 'winston';
+
+const logger = winston.createLogger({
+    level: 'debug',
+    format: winston.format.combine(
+        winston.format.colorize(),
+        winston.format.json()
+    ),
+    defaultMeta: { service: 'API-EDU' },
+    transports: [
+        new winston.transports.File({ filename: 'error.log', level: 'error' }),
+        new winston.transports.File({ filename: 'combined.log' }),
+    ],
+});
+
+logger.add(new winston.transports.Console({
+    format: winston.format.simple(),
+}));
+
+logger.log({
+    level: 'debug',
+    message: 'Pass an object and this works',
+    additional: 'properties',
+    are: 'passed along'
+});
+
 export const register = (app: express.Application) => {
 
     /**
