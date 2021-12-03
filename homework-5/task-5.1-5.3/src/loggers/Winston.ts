@@ -1,4 +1,5 @@
 import winston from 'winston';
+import { Config } from '../config/index';
 
 const Winston = winston.createLogger({
     level: 'debug',
@@ -13,8 +14,10 @@ const Winston = winston.createLogger({
     ],
 });
 
-Winston.add(new winston.transports.Console({
-    format: winston.format.simple(),
-}));
+if (parseInt(Config.debug)) {
+    Winston.add(new winston.transports.Console({
+        format: winston.format.simple(),
+    }));
+}
 
-export {Winston}
+export { Winston }
