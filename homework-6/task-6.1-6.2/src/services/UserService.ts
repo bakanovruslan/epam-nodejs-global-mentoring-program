@@ -32,5 +32,9 @@ class UserService {
         return await this.userModel.findByPk(userId);
     }
 
+    async getUserByNamePass(login: any, password: any) {
+        return this.userModel.findOne({ raw: true, where: { login: login, password: password } });
+    }
+
 }
 export { UserService };

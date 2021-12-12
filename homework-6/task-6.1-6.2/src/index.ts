@@ -1,4 +1,5 @@
 import express from 'express';
+import * as AuthController from "./controllers/AuthController";
 import * as UserController from "./controllers/UserController";
 import * as GroupController from "./controllers/GroupController";
 import * as UserGroupController from "./controllers/UserGroupController";
@@ -9,6 +10,7 @@ const app = express();
 const port = Config.port;
 
 Logger.register(app);
+AuthController.register(app);
 UserController.register(app);
 GroupController.register(app);
 UserGroupController.register(app);

@@ -4,13 +4,14 @@ import { UserService } from '../services/UserService';
 import { User } from '../types/User';
 import { validator, createSchema, updateSchema, UserRequestSchema } from '../validators/validators';
 import { Users } from '../models/Users';
+import * as Auth from '../middlewares/app/auth';
 
 export const register = (app: express.Application) => {
 
     /**
      * Create user 
      */
-    app.post("/users", validator.query(createSchema), (req: ValidatedRequest<UserRequestSchema>, res) => {
+    app.post("/users", Auth.isAuthorized, validator.query(createSchema), (req: ValidatedRequest<UserRequestSchema>, res) => {
         const user: User = req.query;
         const service = new UserService(Users);
         service.createUser(user).then(function (data) {
@@ -23,7 +24,7 @@ export const register = (app: express.Application) => {
     /**
      * Update user
      */
-    app.put("/users/:userId", validator.query(updateSchema), (req: ValidatedRequest<UserRequestSchema>, res) => {
+    app.put("/users/:userId", Auth.isAuthorized, validator.query(updateSchema), (req: ValidatedRequest<UserRequestSchema>, res) => {
         const id = req.params.userId;
         const params = req.query;
         const service = new UserService(Users);
@@ -37,7 +38,7 @@ export const register = (app: express.Application) => {
     /**
      * Auto-suggested list (filtered by substring)
      */
-    app.get("/users/list", (req, res) => {
+    app.get("/users/list", Auth.isAuthorized, (req, res) => {
         if (req.query.search) {
             const userLimit = 3;
             const filterString = req.query.search.toString();
@@ -56,7 +57,7 @@ export const register = (app: express.Application) => {
     /**
      * Get user
      */
-    app.get("/users/:userId", (req, res) => {
+    app.get("/users/:userId", Auth.isAuthorized, (req, res) => {
         const userId = req.params.userId;
         const service = new UserService(Users);
         service.getUser(parseInt(userId)).then(function (data) {
@@ -69,7 +70,7 @@ export const register = (app: express.Application) => {
     /**
      * Soft-delete user
      */
-    app.patch("/users/:userId", (req, res) => {
+    app.patch("/users/:userId", Auth.isAuthorized, (req, res) => {
         let id = req.params.userId;
         let params = { 'isDeleted': true };
         const service = new UserService(Users);
