@@ -10,7 +10,7 @@ export const register = (app: express.Application) => {
     /**
      * Greate user-group
      */
-    app.post("/user-groups", Auth.isAuthorized, validator.query(createSchema), (req: ValidatedRequest<UserGroupRequestSchema>, res) => {
+    app.post("/user-groups", validator.query(createSchema), (req: ValidatedRequest<UserGroupRequestSchema>, res: any) => {
         const userId = req.query.userId;
         const groupIds = req.query.groupIds;
         const service = new UserGroupService(UserGroups);

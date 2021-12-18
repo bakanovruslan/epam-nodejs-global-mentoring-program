@@ -11,7 +11,7 @@ export const register = (app: express.Application) => {
     /**
      * Greate groups
      */
-    app.post("/groups", Auth.isAuthorized, validator.query(createSchema), (req: ValidatedRequest<GroupRequestSchema>, res) => {
+    app.post("/groups", validator.query(createSchema), (req: ValidatedRequest<GroupRequestSchema>, res: any) => {
         const group: Group = req.query;
         const service = new GroupService(Groups);
         service.createGroup(group).then(function (data) {
@@ -24,7 +24,7 @@ export const register = (app: express.Application) => {
     /**
      * Update group
      */
-    app.put("/groups/:groupId", Auth.isAuthorized, validator.query(updateSchema), (req: ValidatedRequest<GroupRequestSchema>, res) => {
+    app.put("/groups/:groupId", validator.query(updateSchema), (req: ValidatedRequest<GroupRequestSchema>, res: any) => {
         const id = req.params.groupId;
         const params = req.query;
         const service = new GroupService(Groups);
@@ -38,7 +38,7 @@ export const register = (app: express.Application) => {
     /**
      * Remove group
      */
-    app.delete("/groups/:groupId", Auth.isAuthorized, (req, res) => {
+    app.delete("/groups/:groupId", (req: any, res: any) => {
         const id = req.params.groupId;
         const service = new GroupService(Groups);
         service.removeGroup(parseInt(id)).then(function (data: any) {
@@ -51,7 +51,7 @@ export const register = (app: express.Application) => {
     /**
      * Get all groups
      */
-    app.get("/groups", Auth.isAuthorized, (req, res) => {
+    app.get("/groups", (req: any, res: any) => {
         const service = new GroupService(Groups);
         service.getAllGroups().then(function (data) {
             res.json(data);
@@ -63,7 +63,7 @@ export const register = (app: express.Application) => {
     /**
      * Get Group
      */
-    app.get("/groups/:groupId", Auth.isAuthorized, (req, res) => {
+    app.get("/groups/:groupId", (req: any, res: any) => {
         const groupId = req.params.groupId;
         const service = new GroupService(Groups);
         service.getGroup(parseInt(groupId)).then(function (data) {
