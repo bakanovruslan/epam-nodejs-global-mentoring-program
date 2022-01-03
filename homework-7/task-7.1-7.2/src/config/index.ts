@@ -13,5 +13,12 @@ export const Config = {
     unauthorizedTitle: 'Unauthorized',
     forbiddenTitle: 'Forbidden',
 
-    appListenPhrase: 'App listening at http://localhost'
+    appListenPhrase: 'App listening at http://localhost',
+
+    dbSystem: process.env.DB_MS,
+    dbUser: process.env.DB_USER,
+    dbPass: process.env.DB_PASS,
+    dbHost: process.env.DB_HOST,
+    dbPort: process.env.DB_PORT,
+    dbName: process.env.DB_NAME,
 }
